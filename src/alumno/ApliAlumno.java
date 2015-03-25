@@ -17,15 +17,19 @@ import java.text.SimpleDateFormat;
  * @author Eduardo
  */
 public class ApliAlumno {
-    
 
     public static void main(String[] args) {
         //indica nombre y apellidos de alumno
         String nombreApellidos;
+        //indica la fecha de nacimiento del alumno
         Calendar fechaNac = null;
+        //es el numero de telefono del alumno
         long telefono;
+        //indica el sexo del alumno
         char sexo;
+        //indica el numero de hermanos que tiene el alumno
         int numHermanos;
+        //es un objeto de tipo Alumno
         Alumno objAlumno = null;
 
         //se crea un objeto de tipo Scanner para interactuar con el usuario
@@ -37,16 +41,11 @@ public class ApliAlumno {
         nombreApellidos = teclado.next();
 
         //se solicita fecha de nacimiento
-        System.out.println("Introduce mes de nacimiento(yyyy/mm/dd)");
-        int mes = teclado.nextInt();
-        System.out.println("Introduce dia de nacimiento(yyyy/mm/dd)");
-        int dia = teclado.nextInt();
-        System.out.println("Introduce año de nacimiento(yyyy/mm/dd)");
-        int anio = teclado.nextInt();
+        System.out.println("Introduce fecha de nacimiento(dd/mm/yyyy)");
+        String fecha = teclado.next();
         try {
-            String fecha = mes + "/" + dia + "/" + anio;
-            String pattern = "DD/MM/YYYY";
-            DateFormat format = new SimpleDateFormat(pattern);
+
+            DateFormat format = new SimpleDateFormat("DD/MM/YYYY");
             Date date = format.parse(fecha);
             fechaNac = dateToCalendar(date);
         } catch (ParseException e) {
@@ -60,7 +59,7 @@ public class ApliAlumno {
         while (!comprobarDigitosTelefono(telefono)) {
             System.out.println("Has introducido un numero que no tiene 9 digitos");
             System.out.println("Introduce el numero de telefono");
-            telefono = teclado.nextInt();
+            telefono = teclado.nextLong();
         }
 
         //se solicita el sexo del alumno
@@ -94,11 +93,11 @@ public class ApliAlumno {
         while (respuesta == 's' || respuesta == 'S') {
             //se muestra al usuario los indices de las asignaturas
             objAlumno.mostrarIndices();
-            
+
             //se le pide que indtroduzca un indice de asignatura valido
             String pregunta6 = "Introduce indice de la asignatura a modificar";
-            int indiceAsig = indiceAsignatura(pregunta6,objAlumno);
-            
+            int indiceAsig = indiceAsignatura(pregunta6, objAlumno);
+
             //se pide que meta la nota
             System.out.println("Introduce la nota");
             int nota = teclado.nextInt();
@@ -109,10 +108,10 @@ public class ApliAlumno {
                 System.out.println("Introduce una nota");
                 nota = teclado.nextInt();
             }
-            
+
             //se modifica la nota
             objAlumno.setNota(indiceAsig, nota);
-            
+
             //se le pregunta si quiere modificar otra nota
             respuesta = preguntar(pregunta);
         }
@@ -146,12 +145,12 @@ public class ApliAlumno {
             objAlumno.mostrarIndices();
             //se solicita que meta un indice valido de la asignatura sobre la que quiere añadir o modificar la observacion
             String pregunta7 = "Introduce el indice de la asignatura de la que quieres añadir o modificar la observacion";
-            int indiceAsig = indiceAsignatura(pregunta7,objAlumno);
-            
+            int indiceAsig = indiceAsignatura(pregunta7, objAlumno);
+
             //se pide que introduzca la observacion
             System.out.println("Introduce la observacion para esa asignatura");
             String observa = teclado.next();
-            
+
             //se añade esa observacion a la coleccion
             objAlumno.addObservacion(indiceAsig, observa);
 
@@ -179,8 +178,6 @@ public class ApliAlumno {
         if (respuesta5 == 's' || respuesta5 == 'S') {
             objAlumno.mostrarObservaciones();
         }
-        
-   
 
     }
 
@@ -192,6 +189,7 @@ public class ApliAlumno {
      */
     private static char preguntar(String pregunta) {
         Scanner teclado = new Scanner(System.in);
+        //se le hace la pregunta al usuario
         System.out.println(pregunta);
         char respuesta = teclado.next().charAt(0);
         //control de rango
@@ -215,33 +213,30 @@ public class ApliAlumno {
         boolean digitos = true;
         int cont = 0;
         //se repite el bucle mientras queden digitos en el numero de telefono
-        while (telefono != 0) 
-        {
+        while (telefono != 0) {
             telefono = telefono / 10;
             cont++;
         }
         //se comprueba si el numero tiene 9 digitos
-        if (cont != 9) 
-        {
+        if (cont != 9) {
             digitos = false;
         }
         return digitos;
     }
 
-         /**
+    /**
      * Metodo que devuelve un indice de asignatura valido
      *
      * @param pregunta es la pregunta que se le hace al usuario
      * @param objAlumno es el alumno sobre el que se quiere hacer la pregunta
      * @return el indice de la asignatura
      */
-    public static  int indiceAsignatura(String pregunta,Alumno objAlumno) 
-    {
+    public static int indiceAsignatura(String pregunta, Alumno objAlumno) {
         Scanner teclado = new Scanner(System.in);
         System.out.println(pregunta);
         int indice = teclado.nextInt();
         //control de rango para comprobar que mete un indice de asignatura valido
-        while (indice < 0 || indice >= objAlumno.getLengthAsignaturas()) {
+        while (indice < 0 || indice >= Alumno.ASIGNATURAS.length) {
             System.out.println("Has introducido un indice incorrecto");
             //se vuelve a mostrar los indices de las asignaturas
             objAlumno.mostrarIndices();
@@ -253,7 +248,7 @@ public class ApliAlumno {
 
     /**
      * @param date
-     * @return 
+     * @return
      *
      */
     public static Calendar dateToCalendar(Date date) {
