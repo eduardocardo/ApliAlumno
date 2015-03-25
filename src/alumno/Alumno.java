@@ -5,6 +5,7 @@
  */
 package alumno;
 import java.util.Calendar;
+
 /**
  *Esta clase representa los datos de un alumno
  * @author Eduardo
@@ -26,7 +27,7 @@ public class Alumno {
     //array que almacena todas las notas de las asignaturas
     private int[] notas;
     //array que almacena las asignaturas que tiene el alumno
-    private static final String [] ASIGNATURAS={"Entornos","Programacion","Sistemas","Fol"
+    public static final String [] ASIGNATURAS={"Entornos","Programacion","Sistemas","Fol"
      ,"Bases de datos","Lenguajes de marcas"};
     
     public Alumno(String nomApe,Calendar fechaNac,long telef,char sex,int numHerma)
@@ -36,14 +37,15 @@ public class Alumno {
         this.telefono= telef;
         this.sexo = sex;
         this.numHermanos = numHerma;
-        observaciones = new String[6];
+        observaciones = new String[ASIGNATURAS.length];
         //se inicializa el array con un tamaño igual al numero de asignaturas
-        notas = new int[6];
+        notas = new int[ASIGNATURAS.length];
     }
     
     /**
      * Metodo que devuelve la nota que tiene el alumno en una asignatura
-     * @param indiceAsig es el indice que tiene la asignatura en el array
+     * @param indiceAsig es el indice de la asignatura de la que se quiere
+     * obtener la nota
      * @return la nota de esa asignatura
      */
     public int getNota(int indiceAsig)
@@ -67,7 +69,7 @@ public class Alumno {
             
         }
        
-        return sumaNotas/notas.length;
+        return (float)(sumaNotas/notas.length);
     }
     
     /**
@@ -153,6 +155,17 @@ public class Alumno {
     }
     
     /**
+     * Metodo que modifica el numero de telefono del alumno
+     * @param telefono es el nuevo numero de telefono que se quiere
+     * introducir
+     */
+    public void setTelefono(long telefono)
+    {
+        this.telefono = telefono;
+        
+    }
+    
+    /**
      * Metodo que devuelve las observaciones que hay sobre el alumno
      * @param indiceAsig es el indice de la asignatura sobre la que se quiere
      * obtener las observaciones
@@ -218,18 +231,30 @@ public class Alumno {
        System.out.println("Lista de asignaturas :");
        for (int i = 0; i < ASIGNATURAS.length; i++)
        {
-            System.out.println("Indice : " + i + " " + ASIGNATURAS[i]);
+            System.out.println("Indice : " + i + " - " + ASIGNATURAS[i]);
                 
         }
     }
     
     /**
-     * Metodo que devuelve el tamaño de la coleccion de asignaturas
-     * @return el tamaño de la coleccion
+     * Metodo que calcula la edad del alumno a partir de su fecha
+     * de nacimiento
+     * @return la edad del alumno
      */
-    public int getLengthAsignaturas()
+    public int edad()
     {
-        return ASIGNATURAS.length;
+        int edad = 0;
+        //Primero se obtiene del sistema la fecha actual
+        Calendar fechaActual = Calendar.getInstance();
+        //se calcula la edad y si el dia del año correspondiente a la fecha de
+        //nacimiento es mayor que el dia del año de la fecha actual se resta
+        //1 a la edad
+        edad = fechaActual.get(Calendar.YEAR) - fechaNac.get(Calendar.YEAR);
+        if(fechaNac.get(Calendar.DAY_OF_YEAR)> fechaActual.get(Calendar.DAY_OF_YEAR))
+        {
+            edad--;
+        }
+        return edad;
     }
     
     /**
@@ -239,7 +264,7 @@ public class Alumno {
     {
         
         System.out.println("Nombre y apellidos : " + nombreApellidos + "\n"
-                           + "Fecha de nacimiento : " + fechaNac + "\n"
+                           + "Edad : "  + edad() + "\n"
                            + "Telefono : " + telefono + "\n" + "Sexo : " + sexo
                            + "\n" + "Numero de hermanos : " + numHermanos);
         System.out.println("Relacion de notas por asignatura :");
